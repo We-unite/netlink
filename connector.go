@@ -120,6 +120,7 @@ type ProcEventExit struct {
 	ProcessPid  int32
 	ProcessTgid int32
 	ExitCode    uint32
+	ExitSignal  uint32
 }
 
 type ProcEventCoreDump struct {
