@@ -65,8 +65,11 @@ func (ns *NetlinkSocket) Send(request *NetlinkRequest) error {
 	return nil
 }
 
-func (s *NetlinkSocket) Receive() ([]syscall.NetlinkMessage, error) {
-	rb := make([]byte, syscall.Getpagesize())
+func (s *NetlinkSocket) Receive(numPages int) ([]syscall.NetlinkMessage, error) {
+	if numPages <= 0 {
+		return nil, fmt.Errorf("too small buffer only %d pages", numPages)
+	}
+	rb := make([]byte, numPages*syscall.Getpagesize())
 	nr, _, err := syscall.Recvfrom(s.fd, rb, 0)
 	if err != nil {
 		return nil, err
