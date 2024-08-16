@@ -1,5 +1,10 @@
 package netlink
 
+/*
+#include "reg.h"
+*/
+import "C"
+
 import (
 	"fmt"
 	"os"
@@ -40,6 +45,11 @@ func NewNetlinkSocket(protocol NetlinkProtocol, groups uint32) (*NetlinkSocket, 
 			return nil, err
 		}
 	}
+
+	if tmp := C.registerNetlink(C.int(ns.fd)); tmp != 0 {
+		return nil, fmt.Errorf("can't register to netlink!")
+	}
+	fmt.Printf("Netlink Registered!\n")
 	return ns, nil
 }
 
